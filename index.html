@@ -15,6 +15,11 @@
     href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- PayPal SDK (hosted buttons) -->
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=BAA75CfHOufNz0vJa6y8kT-XHrZ0eMovDS8VZ8lzhpx3UM7J_HY_8mfcv9nQ3S7xSa1eEp8JBPASCleYB4&components=hosted-buttons&disable-funding=venmo&currency=USD">
+  </script>
 </head>
 
 <body>
@@ -27,11 +32,12 @@
       </a>
 
       <nav class="nav__links" id="navLinks">
-        <a href="#projects">Projects</a>
         <a href="#showcase">Showcase</a>
+        <a href="#projects">Projects</a>
         <a href="#services">Services</a>
         <a href="#reviews">Reviews</a>
-        <a href="#contact" class="btn btn--sm btn--primary">Get In Touch</a>
+        <a href="#contact">Get In Touch</a>
+        <a href="#coffee" class="nav__coffee">COFFEE</a>
       </nav>
 
       <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
@@ -61,11 +67,13 @@
           </div>
 
           <div class="hero__stats">
-            <div class="stat"><span class="stat__num" data-count="4">0</span><span class="stat__label">Years
-                experience</span></div>
-            <div class="stat"><span class="stat__num" data-count="9">0</span><span class="stat__label">Projects
-                shipped</span></div>
-            <div class="stat"><span class="stat__num" data-count="13">0</span><span class="stat__label">Happy
+            <div class="stat"><span class="stat__num" data-count="13" data-suffix="K">0</span><span
+                class="stat__label">Followers</span></div>
+            <div class="stat"><span class="stat__num" data-count="130" data-suffix="K">0</span><span
+                class="stat__label">Likes</span></div>
+            <div class="stat"><span class="stat__num" data-count="180">0</span><span class="stat__label">UI
+                Designs</span></div>
+            <div class="stat"><span class="stat__num" data-count="20">0</span><span class="stat__label">Happy
                 clients</span></div>
           </div>
         </div>
@@ -78,22 +86,8 @@
       </div>
     </section>
 
-    <!-- ===== Projects (real shipped apps) ===== -->
-    <section class="section" id="projects">
-      <div class="container">
-        <div class="section__head reveal">
-          <h2 class="section__title">Apps I've <span class="accent">shipped</span></h2>
-          <p class="section__lead">Real products live on the stores. Tap to download and try them.</p>
-        </div>
-
-        <div class="projects-grid" id="projectsGrid">
-          <!-- cards injected by JS -->
-        </div>
-      </div>
-    </section>
-
     <!-- ===== UI Showcase (TikTok videos) ===== -->
-    <section class="section section--alt" id="showcase">
+    <section class="section" id="showcase">
       <div class="container">
         <div class="section__head reveal">
           <h2 class="section__title">UI I <span class="accent">build</span></h2>
@@ -102,6 +96,20 @@
 
         <div class="portfolio-grid" id="portfolioGrid">
           <!-- videos injected by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Projects (real shipped apps) ===== -->
+    <section class="section section--alt" id="projects">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">Apps I've <span class="accent">shipped</span></h2>
+          <p class="section__lead">Real products live on the stores. Tap to download and try them.</p>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+          <!-- cards injected by JS -->
         </div>
       </div>
     </section>
@@ -148,6 +156,30 @@
               GitHub
             </a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Buy Me a Coffee ===== -->
+    <section class="section section--alt" id="coffee">
+      <div class="container">
+        <div class="coffee reveal">
+          <span class="coffee__emoji">☕</span>
+          <h2 class="coffee__title">Buy me a <span class="accent">coffee</span></h2>
+          <p class="coffee__sub">
+            If my work or UI builds helped you out, a little caffeine keeps the
+            late-night Flutter coding going. Thank you! 💙
+          </p>
+
+          <!-- PayPal hosted button -->
+          <div class="coffee__btn">
+            <div id="paypal-container-R3EBAWUJ5F2CE"></div>
+          </div>
+          <script>
+            paypal.HostedButtons({
+              hostedButtonId: "R3EBAWUJ5F2CE",
+            }).render("#paypal-container-R3EBAWUJ5F2CE")
+          </script>
         </div>
       </div>
     </section>

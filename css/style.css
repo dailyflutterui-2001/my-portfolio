@@ -93,6 +93,10 @@ h1, h2, h3 { font-family: 'Sora', sans-serif; line-height: 1.12; letter-spacing:
 .nav__links a:not(.btn).active { color: var(--text); }
 .nav__links .btn { margin-left: .5rem; }
 
+/* simple blue "COFFEE" text link in the navbar */
+.nav__links a.nav__coffee { color: var(--accent); font-weight: 600; }
+.nav__links a.nav__coffee:hover { color: var(--accent); }
+
 .nav__toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; }
 .nav__toggle span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: .3s var(--ease); }
 .nav__toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -139,7 +143,7 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 /* Hero visual — circular framed photo with accent ring */
 .hero__visual { display: flex; justify-content: center; }
 .photo {
-  width: min(360px, 80vw); aspect-ratio: 1 / 1; border-radius: 50%;
+  width: min(280px, 70vw); aspect-ratio: 1 / 1; border-radius: 50%;
   overflow: hidden; padding: 6px;
   border: 2px solid var(--accent);
   background: var(--bg);
@@ -181,7 +185,11 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 .tiktok-item .tiktok-embed { margin: 0 !important; max-width: 100% !important; min-width: 0 !important; }
 .tiktok-item iframe { max-width: 100% !important; }
 @media (max-width: 960px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 720px) { .portfolio-grid { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  .portfolio-grid { grid-template-columns: 1fr; }
+  /* shrink the videos on phones so they don't dominate the screen */
+  .tiktok-item { max-width: 320px; margin-inline: auto; }
+}
 
 /* Service card */
 .service-card__icon {
@@ -294,6 +302,30 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 .form-status { font-size: .9rem; min-height: 1.2rem; }
 .form-status.ok { color: #16a34a; }
 .form-status.err { color: #dc2626; }
+
+/* ---------- Buy Me a Coffee ---------- */
+.coffee {
+  text-align: center; max-width: 560px; margin: 0 auto;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+  padding: 52px 40px; box-shadow: var(--shadow);
+}
+.coffee__emoji {
+  display: inline-block; font-size: 3rem; line-height: 1; margin-bottom: 1rem;
+  transform-origin: 50% 90%; animation: coffee-bob 3s ease-in-out infinite;
+}
+.coffee__title { font-size: clamp(1.7rem, 3.6vw, 2.4rem); }
+.coffee__sub { color: var(--muted); margin-top: 1rem; font-size: 1.05rem; }
+
+/* simple wrapper — just gives PayPal's hosted-button iframe room so it doesn't collapse to a sliver */
+.coffee__btn {
+  width: 320px; max-width: 100%; margin: 2rem auto 0;
+}
+.coffee__btn > div { width: 100%; min-width: 280px; }
+
+@keyframes coffee-bob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(-4deg); }
+}
 
 /* ---------- Footer ---------- */
 .footer { border-top: 1px solid var(--border); padding: 40px 0; }

@@ -295,11 +295,12 @@ function initCounters() {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const node = e.target, target = +node.dataset.count;
+      const suffix = node.dataset.suffix || '';
       let cur = 0; const step = Math.max(1, Math.ceil(target / 40));
       const tick = () => {
         cur += step;
-        if (cur >= target) { node.textContent = target; }
-        else { node.textContent = cur; requestAnimationFrame(tick); }
+        if (cur >= target) { node.textContent = target + suffix; }
+        else { node.textContent = cur + suffix; requestAnimationFrame(tick); }
       };
       tick(); io.unobserve(node);
     });
