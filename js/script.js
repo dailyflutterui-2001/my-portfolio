@@ -55,9 +55,15 @@ const PROJECTS = [
    `avatar` is a Memoji-style image. To use your own real Memoji, save the PNG
    into assets/avatars/ and set avatar: 'assets/avatars/sarah.png'. */
 const TESTIMONIALS = [
-  { quote: 'Kai turned our Figma into a pixel-perfect app faster than we expected. Smooth animations and zero bugs at launch.', name: 'Sarah L.', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Sarah&backgroundColor=ede7ff' },
-  { quote: 'Best Flutter developer I\'ve worked with. Clear communication, clean code, and shipped right on schedule.', name: 'Daniel M.', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Daniel&backgroundColor=d7f0ff' },
-  { quote: 'Our app feels premium now. Performance is great and the UI is exactly what we wanted. Highly recommend.', name: 'Aisha R.', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Aisha&backgroundColor=ffe5ec' },
+  { quote: 'Kai turned our Figma into a pixel-perfect app faster than we expected. Smooth animations and zero bugs at launch.', name: 'Bryan Foster', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Bryan&backgroundColor=ede7ff' },
+  { quote: 'Best Flutter developer I\'ve worked with. Clear communication, clean code, and shipped right on schedule.', name: 'Daniel Mercer', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Daniel&backgroundColor=d7f0ff' },
+  { quote: 'Our app feels premium now. Performance is great and the UI is exactly what we wanted. Highly recommend.', name: 'Aisha Rahman', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Aisha&backgroundColor=ffe5ec' },
+  { quote: 'Super professional from start to finish. The app runs buttery smooth and looks fantastic on every device.', name: 'Emily Carter', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Emily&backgroundColor=e0f7ec' },
+  { quote: 'Delivered exactly what we needed and even suggested improvements we hadn\'t thought of. A real pro.', name: 'Marcus Lee', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Marcus&backgroundColor=fff2cc' },
+  { quote: 'Great attention to detail. The animations and transitions make our product feel truly high-end.', name: 'Sophia Bennett', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Sophia&backgroundColor=ffe5ec' },
+  { quote: 'Fast, reliable, and easy to work with. He understood the brief instantly and nailed the final result.', name: 'James Walker', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=James&backgroundColor=d7f0ff' },
+  { quote: 'The whole process was effortless. Clean handover, well-structured code, and a beautiful finished app.', name: 'Olivia Hughes', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Olivia&backgroundColor=ede7ff' },
+  { quote: 'Couldn\'t be happier with the result. Responsive, talented, and genuinely cares about quality.', name: 'Nathan Brooks', rating: 5, avatar: 'https://api.dicebear.com/9.x/personas/svg?seed=Nathan&backgroundColor=e0f7ec' },
 ];
 
 /* Brand glyphs for store buttons + a filled star */
@@ -228,24 +234,34 @@ function renderProjects() {
   });
 }
 
+function reviewCard(t) {
+  const card = el('article', 'card review-card');
+  const stars = Array.from({ length: 5 }, (_, k) =>
+    `<span class="star ${k < t.rating ? 'on' : ''}">${STAR}</span>`).join('');
+  // Memoji-style avatar image; fall back to a lettered circle if it can't load.
+  const onErr = `this.remove(); this.parentNode.classList.add('avatar--letter'); this.parentNode.textContent='${t.name.charAt(0)}';`;
+  card.innerHTML = `
+    <div class="stars">${stars}</div>
+    <p class="review-card__quote">${t.quote}</p>
+    <div class="review-card__person">
+      <span class="avatar"><img src="${t.avatar}" alt="${t.name}" loading="lazy" onerror="${onErr}" /></span>
+      <span class="review-card__meta"><strong>${t.name}</strong></span>
+    </div>`;
+  return card;
+}
+
 function renderReviews() {
   const grid = $('#reviewsGrid'); if (!grid) return;
-  TESTIMONIALS.forEach((t, i) => {
-    const card = el('article', 'card review-card reveal');
-    card.style.transitionDelay = `${(i % 3) * 80}ms`;
-    const stars = Array.from({ length: 5 }, (_, k) =>
-      `<span class="star ${k < t.rating ? 'on' : ''}">${STAR}</span>`).join('');
-    // Memoji-style avatar image; fall back to a lettered circle if it can't load.
-    const onErr = `this.remove(); this.parentNode.classList.add('avatar--letter'); this.parentNode.textContent='${t.name.charAt(0)}';`;
-    card.innerHTML = `
-      <div class="stars">${stars}</div>
-      <p class="review-card__quote">${t.quote}</p>
-      <div class="review-card__person">
-        <span class="avatar"><img src="${t.avatar}" alt="${t.name}" loading="lazy" onerror="${onErr}" /></span>
-        <span class="review-card__meta"><strong>${t.name}</strong></span>
-      </div>`;
-    grid.appendChild(card);
+  const track = el('div', 'reviews-track');
+  // Render the cards twice so the marquee can loop seamlessly (the second
+  // copy is decorative and hidden from screen readers).
+  TESTIMONIALS.forEach(t => track.appendChild(reviewCard(t)));
+  TESTIMONIALS.forEach(t => {
+    const clone = reviewCard(t);
+    clone.setAttribute('aria-hidden', 'true');
+    track.appendChild(clone);
   });
+  grid.appendChild(track);
 }
 
 /* Highlight the nav link for the section currently in view (active underline). */

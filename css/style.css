@@ -257,6 +257,37 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 .review-card__meta { display: flex; flex-direction: column; line-height: 1.3; }
 .review-card__meta strong { font-size: .95rem; }
 
+/* ---------- Scrolling reviews marquee ---------- */
+.reviews-marquee {
+  overflow: hidden;
+  width: 100%;
+  /* Fade the edges so cards slide in and out softly. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent);
+}
+.reviews-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: reviews-scroll 55s linear infinite;
+  will-change: transform;
+}
+/* Pause the scroll when the visitor hovers so they can read a card. */
+.reviews-marquee:hover .reviews-track { animation-play-state: paused; }
+.reviews-track .review-card {
+  width: 340px;
+  max-width: 80vw;
+  flex-shrink: 0;
+}
+/* Two identical copies sit in the track, so shifting by half its width loops seamlessly. */
+@keyframes reviews-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-track { animation: none; }
+}
+
 /* ---------- Contact CTA ---------- */
 .cta {
   text-align: center; max-width: 640px; margin: 0 auto;
