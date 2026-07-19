@@ -7,8 +7,8 @@
   <meta name="description"
     content="DailyFlutterUI — Premium Flutter app development & UI services by a Flutter developer with 3+ years of experience." />
   <title>DailyFlutterUI</title>
-  <link rel="icon" type="image/jpeg" href="assets/profile.jpg" />
-  <link rel="apple-touch-icon" href="assets/profile.jpg" />
+  <link rel="icon" type="image/jpeg" href="assets/profile.png" />
+  <link rel="apple-touch-icon" href="assets/profile.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -36,7 +36,7 @@
         <a href="#services">Services</a>
         <a href="#reviews">Reviews</a>
         <a href="#contact">Get In Touch</a>
-        <a href="#coffee" class="nav__coffee">COFFEE</a>
+        <a href="#buy" class="nav__buy">BUY NOW</a>
       </nav>
 
       <button class="nav__toggle" id="navToggle" aria-label="Toggle menu">
@@ -57,23 +57,13 @@
           </h1>
           <p class="hero__sub">
             I'm a Flutter developer based in Malaysia with <strong>4+ years</strong> of
-            experience. I help you build beautiful, fast apps your users will love.
+            experience. I build clean, ready-to-ship Flutter UI templates — grab one
+            for <strong>$12</strong>.
           </p>
 
           <div class="hero__cta">
-            <a href="#contact" class="btn btn--primary">Get In Touch</a>
-            <a href="#projects" class="btn btn--ghost">Browse Projects</a>
-          </div>
-
-          <div class="hero__stats">
-            <div class="stat"><span class="stat__num" data-count="13" data-suffix="K">0</span><span
-                class="stat__label">Followers</span></div>
-            <div class="stat"><span class="stat__num" data-count="130" data-suffix="K">0</span><span
-                class="stat__label">Likes</span></div>
-            <div class="stat"><span class="stat__num" data-count="180">0</span><span class="stat__label">UI
-                Designs</span></div>
-            <div class="stat"><span class="stat__num" data-count="20">0</span><span class="stat__label">Happy
-                clients</span></div>
+            <a href="#buy" class="btn btn--primary">Buy Now — $12</a>
+            <a href="#showcase" class="btn btn--ghost">See the UI</a>
           </div>
         </div>
 
@@ -85,39 +75,46 @@
       </div>
     </section>
 
-    <!-- ===== UI Showcase (TikTok videos) ===== -->
+    <!-- ===== UI Showcase (app screens) ===== -->
     <section class="section" id="showcase">
       <div class="container">
         <div class="section__head reveal">
           <h2 class="section__title">UI I <span class="accent">build</span></h2>
-          <p class="section__lead">Flutter UI builds & animations — tap a video to watch it on TikTok.</p>
+          <p class="section__lead">
+            Flutter UI builds &amp; animations. Grab the full source for any of these
+            for just <strong>$12</strong>.
+          </p>
+          <a href="#buy" class="btn btn--primary section__cta">Buy Now — $12</a>
         </div>
 
-        <div class="portfolio-grid" id="portfolioGrid">
-          <!-- videos injected by JS -->
+        <div id="showcaseGroups">
+          <!-- app groups injected by JS -->
+        </div>
+
+        <div class="showcase__foot reveal">
+          <p>Like what you see? The whole set is yours for <strong>$12</strong>.</p>
+          <a href="#buy" class="btn btn--primary">Buy Now</a>
         </div>
       </div>
     </section>
 
-    <!-- ===== Projects (real shipped apps) ===== -->
-    <!--
-<section class="section section--alt" id="projects">
-  <div class="container">
-    <div class="section__head reveal">
-      <h2 class="section__title">
-        Apps I've <span class="accent">shipped</span>
-      </h2>
-      <p class="section__lead">
-        Real products live on the stores. Tap to download and try them.
-      </p>
-    </div>
+    <!-- ===== Projects (real shipped apps) — disabled for now =====
+    <section class="section section--alt" id="projects">
+      <div class="container">
+        <div class="section__head reveal">
+          <h2 class="section__title">
+            Apps I've <span class="accent">shipped</span>
+          </h2>
+          <p class="section__lead">
+            Real products live on the stores. Tap to download and try them.
+          </p>
+        </div>
 
-    <div class="projects-grid" id="projectsGrid">
-      <!-- cards injected by JS -->
-    </div>
-    </div>
+        <div class="projects-grid" id="projectsGrid"></div>
+      </div>
     </section>
-    
+    ===== -->
+
 
     <!-- ===== Services ===== -->
     <section class="section" id="services">
@@ -169,25 +166,24 @@
       </div>
     </section>
 
-    <!-- ===== Buy Me a Coffee ===== -->
-    <section class="section section--alt" id="coffee">
+    <!-- ===== Buy Now ===== -->
+    <section class="section section--alt" id="buy">
       <div class="container">
-        <div class="coffee reveal">
-          <span class="coffee__emoji">☕</span>
-          <h2 class="coffee__title">Buy me a <span class="accent">coffee</span></h2>
-          <p class="coffee__sub">
-            If my work or UI builds helped you out, a little caffeine keeps the
-            late-night Flutter coding going. Thank you! 💙
+        <div class="section__head reveal">
+          <h2 class="section__title">Get the <span class="accent">template</span></h2>
+          <p class="section__lead">
+            Full Flutter source, yours to reuse on unlimited projects.
           </p>
+        </div>
 
-          <!-- PayPal hosted button -->
-          <div class="coffee__btn">
-            <div id="paypal-container-R3EBAWUJ5F2CE"></div>
-          </div>
+        <!-- PayPal hosted button — it renders its own product card, so keep this
+             wrapper plain and just give it a sensible width to sit in. -->
+        <div class="buy__card reveal">
+          <div id="paypal-container-FQH87GBVJ6GJJ"></div>
           <script>
             paypal.HostedButtons({
-              hostedButtonId: "R3EBAWUJ5F2CE",
-            }).render("#paypal-container-R3EBAWUJ5F2CE")
+              hostedButtonId: "FQH87GBVJ6GJJ",
+            }).render("#paypal-container-FQH87GBVJ6GJJ")
           </script>
         </div>
       </div>

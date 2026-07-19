@@ -4,22 +4,55 @@
 'use strict';
 
 /* ---------- Data (edit these to customize) ---------- */
-// Paste the full URL of each TikTok video into `tiktok`, e.g.
-//   'https://www.tiktok.com/@yourname/video/7300000000000000000'‰
-// Each one renders as TikTok's official player and links to that exact video.
-// Items left with an empty `tiktok` are skipped, so fill them in as you go.
+// Each entry is one app, shown as a title followed by its screens in a 4-per-row grid.
+// Add another object here to add a second app group.
 const PORTFOLIO = [
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7623815136079301895?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
-
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7644973609277984007?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
-
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7640875848249232648?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
-
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7636447547724139784?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
-
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7622250485440875783?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
-
-  { tiktok: 'https://www.tiktok.com/@dailyflutterui/video/7647575336867106055?is_from_webapp=1&sender_device=pc&web_id=7648110123064133140' },
+  {
+    title: 'Airbnb Booking App UI',
+    shots: [
+      'assets/1.png',
+      'assets/2.png',
+      'assets/3.png',
+      'assets/4.png',
+      'assets/5.png',
+      'assets/6.png',
+      'assets/7.png',
+      'assets/8.png',
+      'assets/9.png',
+      'assets/10.png',
+      'assets/11.png',
+      'assets/12.png',
+      'assets/13.png',
+      'assets/14.png',
+      'assets/15.png',
+      'assets/16.png',
+      'assets/17.png',
+      'assets/18.png',
+      'assets/19.png',
+      'assets/20.png',
+    ],
+  },
+  {
+    title: 'Food Delivery App UI',
+    shots: [
+      'assets/food0.png',
+      'assets/food.png',
+      'assets/food1.png',
+      'assets/food2.png',
+      'assets/food3.png',
+      'assets/food4.png',
+      'assets/food5.png',
+      'assets/food6.png',
+      'assets/food7.png',
+      'assets/food8.png',
+      'assets/food9.png',
+      'assets/food10.png',
+      'assets/food11.png',
+      'assets/food12.png',
+      'assets/food13.png',
+      'assets/food14.png',
+    ],
+  },
 ];
 
 /* ---------- Real shipped apps ----------
@@ -99,40 +132,102 @@ const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
 
-/* Pull the numeric video id out of a TikTok URL (…/video/1234567890…). */
-const tiktokId = (url) => (url.match(/video\/(\d+)/) || [])[1] || '';
-
 /* ---------- Render sections ---------- */
+const SHOTS_VISIBLE = 8;   // screens shown before the "Show all" toggle
+
 function renderPortfolio() {
-  const grid = $('#portfolioGrid'); if (!grid) return;
+  const wrap = $('#showcaseGroups'); if (!wrap) return;
 
-  // Only render items that have a TikTok URL filled in.
-  const items = PORTFOLIO.filter(p => p.tiktok);
-  items.forEach((p, i) => {
-    const item = el('article', 'tiktok-item reveal');
-    item.style.transitionDelay = `${(i % 3) * 80}ms`;
+  PORTFOLIO.filter(app => app.shots && app.shots.length).forEach(app => {
+    const group = el('div', 'ui-group');
+    group.appendChild(el('h3', 'ui-group__title reveal', app.title));
 
-    // Official TikTok embed: embed.js turns this <blockquote> into the real player.
-    // The inner link is what shows (and navigates to the video) before/if the script loads.
-    item.innerHTML = `
-      <blockquote class="tiktok-embed" cite="${p.tiktok}" data-video-id="${tiktokId(p.tiktok)}">
-        <section><a href="${p.tiktok}" target="_blank" rel="noopener">Watch on TikTok</a></section>
-      </blockquote>`;
-    grid.appendChild(item);
+    const grid = el('div', 'ui-grid');
+    app.shots.forEach((src, i) => {
+      const shot = el('figure', 'ui-shot reveal');
+      if (i >= SHOTS_VISIBLE) shot.classList.add('is-extra');   // hidden until expanded
+      shot.style.transitionDelay = `${(i % 4) * 80}ms`;         // stagger across each row
+      shot.tabIndex = 0;
+      shot.innerHTML = `<img src="${src}" alt="${app.title} screen ${i + 1}" loading="lazy" />`;
+      shot.addEventListener('click', () => openLightbox(app, i));
+      shot.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(app, i); }
+      });
+      grid.appendChild(shot);
+    });
+    group.appendChild(grid);
+
+    // Only worth a toggle if some screens are actually tucked away.
+    if (app.shots.length > SHOTS_VISIBLE) {
+      const label = `Show all ${app.shots.length} screens`;
+      const btn = el('button', 'btn btn--ghost ui-group__more', label);
+      btn.addEventListener('click', () => {
+        const open = grid.classList.toggle('is-expanded');
+        btn.textContent = open ? 'Show less' : label;
+        // The extras were display:none when initReveal ran, so the observer never
+        // saw them — mark them revealed by hand or they'd stay invisible.
+        if (open) grid.querySelectorAll('.ui-shot.is-extra').forEach(n => n.classList.add('in'));
+        else group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      group.appendChild(btn);
+    }
+
+    wrap.appendChild(group);
   });
-
-  if (items.length) loadTikTokEmbeds();
 }
 
-/* (Re)load TikTok's embed script so it scans and renders the blockquotes we just added. */
-function loadTikTokEmbeds() {
-  const old = document.getElementById('tiktok-embed-js');
-  if (old) old.remove();                         // re-adding forces a fresh scan
-  const s = el('script');
-  s.id = 'tiktok-embed-js';
-  s.async = true;
-  s.src = 'https://www.tiktok.com/embed.js';
-  document.body.appendChild(s);
+/* ---------- Lightbox — the grid thumbnails are too small to read, so a click
+   opens the screen full size, with arrow-key / swipe-free stepping. ---------- */
+let lbEl = null, lbShots = [], lbIndex = 0, lbTitle = '';
+
+function openLightbox(app, i) {
+  lbShots = app.shots; lbIndex = i; lbTitle = app.title;
+  if (!lbEl) lbEl = buildLightbox();
+  paintLightbox();
+  lbEl.classList.add('open');
+  document.body.style.overflow = 'hidden';   // don't scroll the page behind it
+  lbEl.querySelector('.lightbox__close').focus();
+}
+
+function closeLightbox() {
+  if (!lbEl) return;
+  lbEl.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function stepLightbox(d) {
+  lbIndex = (lbIndex + d + lbShots.length) % lbShots.length;   // wraps both ways
+  paintLightbox();
+}
+
+function paintLightbox() {
+  const img = lbEl.querySelector('.lightbox__img');
+  img.src = lbShots[lbIndex];
+  img.alt = `${lbTitle} screen ${lbIndex + 1}`;
+  lbEl.querySelector('.lightbox__count').textContent = `${lbIndex + 1} / ${lbShots.length}`;
+}
+
+function buildLightbox() {
+  const box = el('div', 'lightbox');
+  box.innerHTML = `
+    <button class="lightbox__close" aria-label="Close">&times;</button>
+    <button class="lightbox__nav lightbox__nav--prev" aria-label="Previous screen">&#8249;</button>
+    <img class="lightbox__img" alt="" />
+    <button class="lightbox__nav lightbox__nav--next" aria-label="Next screen">&#8250;</button>
+    <span class="lightbox__count"></span>`;
+  document.body.appendChild(box);
+
+  box.querySelector('.lightbox__close').addEventListener('click', closeLightbox);
+  box.querySelector('.lightbox__nav--prev').addEventListener('click', () => stepLightbox(-1));
+  box.querySelector('.lightbox__nav--next').addEventListener('click', () => stepLightbox(1));
+  box.addEventListener('click', (e) => { if (e.target === box) closeLightbox(); });  // click the backdrop
+  document.addEventListener('keydown', (e) => {
+    if (!box.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') stepLightbox(-1);
+    if (e.key === 'ArrowRight') stepLightbox(1);
+  });
+  return box;
 }
 
 function renderServices() {
@@ -305,25 +400,6 @@ function initReveal() {
   $$('.reveal').forEach(n => io.observe(n));
 }
 
-function initCounters() {
-  const nums = $$('.stat__num');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const node = e.target, target = +node.dataset.count;
-      const suffix = node.dataset.suffix || '';
-      let cur = 0; const step = Math.max(1, Math.ceil(target / 40));
-      const tick = () => {
-        cur += step;
-        if (cur >= target) { node.textContent = target + suffix; }
-        else { node.textContent = cur + suffix; requestAnimationFrame(tick); }
-      };
-      tick(); io.unobserve(node);
-    });
-  }, { threshold: 0.6 });
-  nums.forEach(n => io.observe(n));
-}
-
 function initForm() {
   const form = $('#contactForm'), status = $('#formStatus'); if (!form) return;
   form.addEventListener('submit', (e) => {
@@ -356,7 +432,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initScrollSpy();
   initReveal();
-  initCounters();
   initForm();
   initToTop();
   $('#year').textContent = '2026';
