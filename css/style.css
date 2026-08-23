@@ -189,10 +189,46 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 .ui-shot:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
 .ui-shot:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* screens past the first row-pair, revealed by the "Show all" toggle */
+/* screens past the first row, revealed by the "See more" toggle */
 .ui-shot.is-extra { display: none; }
 .ui-grid.is-expanded .ui-shot.is-extra { display: block; }
-.ui-group__more { display: flex; margin: 28px auto 0; }
+
+/* the grid's height is tweened by JS while it opens/closes */
+.ui-grid.is-animating { overflow: hidden; transition: height .5s var(--ease); }
+/* snappier than the page-wide scroll reveal — this one is a direct response to a tap */
+.ui-grid.is-expanded .ui-shot.is-extra { transition: opacity .45s var(--ease), transform .5s var(--ease); }
+
+/* "See more" toggle — a solid pill sitting on a divider so it can't be missed */
+.ui-more { position: relative; display: flex; justify-content: center; margin-top: 30px; }
+.ui-more::before {
+  content: ''; position: absolute; left: 0; right: 0; top: 50%;
+  height: 1px; background: var(--border);
+}
+.ui-more__btn {
+  position: relative; display: inline-flex; align-items: center; gap: .5rem;
+  font-family: 'Sora', sans-serif; font-weight: 700; font-size: .95rem; line-height: 1;
+  color: #fff; background: var(--accent);
+  padding: .85rem 1.5rem; border-radius: 999px;
+  transition: transform .2s var(--ease), background .2s;
+}
+.ui-more__btn:hover { background: #0d4f87; transform: translateY(-2px); }
+.ui-more__btn:active { transform: translateY(0); }
+.ui-more__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.ui-more__count {
+  font-size: .8rem; font-weight: 700; letter-spacing: .01em;
+  background: rgba(255, 255, 255, .22); border-radius: 999px; padding: .2rem .5rem;
+}
+.ui-more__chev { width: 18px; height: 18px; transition: transform .3s var(--ease); }
+.ui-more__btn.is-open .ui-more__chev { transform: rotate(180deg); }
+
+/* a slow nudge downward — the cheapest way to say "there's more under here" */
+@keyframes ui-more-nudge {
+  0%, 70%, 100% { transform: translateY(0); }
+  80% { transform: translateY(4px); }
+  90% { transform: translateY(0); }
+}
+.ui-more__btn:not(.is-open) .ui-more__chev { animation: ui-more-nudge 2.8s var(--ease) .8s infinite; }
+.ui-more__btn:hover .ui-more__chev, .ui-more__btn:focus-visible .ui-more__chev { animation: none; }
 
 @media (max-width: 960px) { .ui-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 720px) { .ui-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
