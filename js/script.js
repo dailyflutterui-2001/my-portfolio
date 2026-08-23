@@ -33,6 +33,56 @@ const PORTFOLIO = [
     ],
   },
   {
+    title: 'Pizza App UI',
+    shots: [
+      'assets/a1.png',
+      'assets/a2.png',
+      'assets/a3.png',
+      'assets/a4.png',
+      'assets/a5.png',
+      'assets/a6.png',
+      'assets/a7.png',
+      'assets/a8.png',
+      'assets/a9.png',
+      'assets/a10.png',
+
+      'assets/a11.png',
+
+      'assets/a12.png',
+
+      'assets/a13.png',
+
+
+      'assets/a15.png',
+
+      'assets/a16.png',
+
+      'assets/a14.png',
+
+    ],
+  },
+  {
+    title: 'Parcel Delivery App UI',
+    shots: [
+      'assets/p1.png',
+      'assets/p2.png',
+      'assets/p3.png',
+      'assets/p4.png',
+      'assets/p5.png',
+      'assets/p6.png',
+      'assets/p7.png',
+      'assets/p8.png',
+      'assets/p9.png',
+      'assets/p10.png',
+      'assets/p11.png',
+      'assets/p12.png',
+      'assets/p13.png',
+      'assets/p14.png',
+      'assets/p15.png',
+      'assets/p16.png',
+    ],
+  },
+  {
     title: 'Food Delivery App UI',
     shots: [
       'assets/food0.png',
@@ -51,6 +101,35 @@ const PORTFOLIO = [
       'assets/food12.png',
       'assets/food13.png',
       'assets/food14.png',
+    ],
+  },
+  {
+    title: 'Fintech App UI',
+    shots: [
+      'assets/f1.png',
+      'assets/f2.png',
+      'assets/f3.png',
+      'assets/f4.png',
+      'assets/f5.png',
+      'assets/f6.png',
+      'assets/f7.png',
+      'assets/f8.png',
+      'assets/f9.png',
+      'assets/f10.png',
+      'assets/f11.png',
+      'assets/f12.png',
+      'assets/f13.png',
+      'assets/f14.png',
+      'assets/f15.png',
+      'assets/f16.png',
+
+      'assets/f17.png',
+
+      'assets/f18.png',
+
+      'assets/f19.png',
+
+      'assets/f20.png',
     ],
   },
 ];
@@ -104,6 +183,9 @@ const STORE_ICONS = {
   apple: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 12.04c-.03-2.9 2.37-4.29 2.48-4.36-1.35-1.98-3.46-2.25-4.21-2.28-1.79-.18-3.5 1.05-4.41 1.05-.91 0-1.91-1.03-3.15-1-1.62.02-3.11.94-3.94 2.39-1.68 2.92-.43 7.25 1.21 9.62.8 1.16 1.76 2.46 3.02 2.41 1.21-.05 1.67-.78 3.13-.78 1.46 0 1.87.78 3.15.76 1.3-.02 2.12-1.18 2.92-2.35.92-1.35 1.3-2.66 1.32-2.73-.03-.01-2.53-.97-2.55-3.83zM14.78 4.62c.67-.81 1.12-1.94.99-3.07-.96.04-2.13.64-2.82 1.45-.62.72-1.16 1.87-1.02 2.97 1.07.08 2.17-.54 2.85-1.35z"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 2.4c-.37.2-.6.58-.6 1.05v17.1c0 .47.23.85.6 1.05l9.96-9.6L3.6 2.4zm12.2 7.5L5.4 3.86l8.95 8.64 1.45-2.6zm3.1 1.78-2.3-1.32-1.65 2.99 1.66 1.6 2.29-1.32c.74-.43.74-1.52 0-1.95zM5.4 20.14l10.4-6.04-1.45-1.4-8.95 7.44z"/></svg>',
 };
+/* Chevron for the "See more" toggle — flips over when the grid opens */
+const CHEVRON = '<svg class="ui-more__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+
 const STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.26 6.85.78-5.07 4.66 1.38 6.74L12 17.77 5.94 20.44l1.38-6.74L2.25 9.04l6.85-.78L12 2z"/></svg>';
 
 /* Feather-style stroke icons (24x24) */
@@ -133,7 +215,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
 
 /* ---------- Render sections ---------- */
-const SHOTS_VISIBLE = 8;   // screens shown before the "Show all" toggle
+const SHOTS_VISIBLE = 4;   // screens shown before the "See more" toggle
 
 function renderPortfolio() {
   const wrap = $('#showcaseGroups'); if (!wrap) return;
@@ -159,21 +241,91 @@ function renderPortfolio() {
 
     // Only worth a toggle if some screens are actually tucked away.
     if (app.shots.length > SHOTS_VISIBLE) {
-      const label = `Show all ${app.shots.length} screens`;
-      const btn = el('button', 'btn btn--ghost ui-group__more', label);
+      const hidden = app.shots.length - SHOTS_VISIBLE;
+      const more = el('div', 'ui-more');
+      const btn = el('button', 'ui-more__btn');
+      const setLabel = (open) => {
+        btn.innerHTML = open
+          ? `<span>Show less</span>${CHEVRON}`
+          : `<span>See all ${app.shots.length} screens</span><span class="ui-more__count">+${hidden}</span>${CHEVRON}`;
+      };
+      setLabel(false);
+      btn.setAttribute('aria-expanded', 'false');
       btn.addEventListener('click', () => {
-        const open = grid.classList.toggle('is-expanded');
-        btn.textContent = open ? 'Show less' : label;
-        // The extras were display:none when initReveal ran, so the observer never
-        // saw them — mark them revealed by hand or they'd stay invisible.
-        if (open) grid.querySelectorAll('.ui-shot.is-extra').forEach(n => n.classList.add('in'));
-        else group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const open = !grid.classList.contains('is-expanded');
+        btn.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        setLabel(open);
+        toggleShots(grid, open, () => {
+          if (!open) group.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
       });
-      group.appendChild(btn);
+      more.appendChild(btn);
+      group.appendChild(more);
     }
 
     wrap.appendChild(group);
   });
+}
+
+/* Smoothly open/close the hidden screens: the grid's height is tweened between
+   its measured collapsed and expanded size while the extras fade up on a stagger.
+   They stay display:none until asked for, so their images never load early. */
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function animateHeight(grid, from, to, onDone) {
+  if (grid._anim) grid._anim();          // a previous tween is still running — drop it
+
+  grid.classList.add('is-animating');
+  grid.style.height = `${from}px`;
+  void grid.offsetHeight;                // flush, or the browser jumps straight to `to`
+  grid.style.height = `${to}px`;
+
+  const stop = (finished) => {
+    grid.removeEventListener('transitionend', onEnd);
+    clearTimeout(timer);
+    grid._anim = null;
+    grid.style.height = '';
+    grid.classList.remove('is-animating');
+    if (finished && onDone) onDone();
+  };
+  const onEnd = (e) => { if (e.target === grid && e.propertyName === 'height') stop(true); };
+  const timer = setTimeout(() => stop(true), 800);   // in case transitionend never lands
+  grid.addEventListener('transitionend', onEnd);
+  grid._anim = () => stop(false);
+}
+
+function toggleShots(grid, open, onDone) {
+  const extras = $$('.ui-shot.is-extra', grid);
+
+  if (REDUCED_MOTION.matches) {
+    grid.classList.toggle('is-expanded', open);
+    extras.forEach(n => n.classList.toggle('in', open));
+    if (onDone) onDone();
+    return;
+  }
+
+  const start = grid.offsetHeight;
+
+  if (open) {
+    grid.classList.add('is-expanded');
+    extras.forEach((n, i) => {
+      n.classList.remove('in');
+      n.style.transitionDelay = `${90 + (i % 4) * 70}ms`;   // ripple across each row
+    });
+    animateHeight(grid, start, grid.offsetHeight, onDone);
+    // Two frames, so the browser lays the extras out (still transparent) before
+    // they flip to `.in` — in the same frame there'd be nothing to transition from.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      extras.forEach(n => n.classList.add('in'));
+    }));
+  } else {
+    extras.forEach(n => { n.style.transitionDelay = '0ms'; n.classList.remove('in'); });
+    setTimeout(() => {                                      // fade them out, then slide shut
+      grid.classList.remove('is-expanded');
+      animateHeight(grid, start, grid.offsetHeight, onDone);
+    }, 170);
+  }
 }
 
 /* ---------- Lightbox — the grid thumbnails are too small to read, so a click
