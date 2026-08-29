@@ -104,6 +104,27 @@ const PORTFOLIO = [
     ],
   },
   {
+    title: 'Fashion App UI',
+    shots: [
+      'assets/c1.png',
+      'assets/c2.png',
+      'assets/c3.png',
+      'assets/c4.png',
+      'assets/c5.png',
+      'assets/c6.png',
+      'assets/c7.png',
+      'assets/c8.png',
+      'assets/c9.png',
+      'assets/c10.png',
+      'assets/c11.png',
+      'assets/c12.png',
+      'assets/c13.png',
+      'assets/c14.png',
+      'assets/c15.png',
+      'assets/c16.png',
+    ],
+  },
+  {
     title: 'Fintech App UI',
     shots: [
       'assets/f1.png',
@@ -329,7 +350,7 @@ function toggleShots(grid, open, onDone) {
 }
 
 /* ---------- Lightbox — the grid thumbnails are too small to read, so a click
-   opens the screen full size, with arrow-key / swipe-free stepping. ---------- */
+   opens the screen full size, with arrow-key, click and swipe stepping. ---------- */
 let lbEl = null, lbShots = [], lbIndex = 0, lbTitle = '';
 
 function openLightbox(app, i) {
@@ -357,6 +378,13 @@ function paintLightbox() {
   img.src = lbShots[lbIndex];
   img.alt = `${lbTitle} screen ${lbIndex + 1}`;
   lbEl.querySelector('.lightbox__count').textContent = `${lbIndex + 1} / ${lbShots.length}`;
+
+  const single = lbShots.length < 2;                 // nothing to step to — drop the arrows
+  lbEl.querySelectorAll('.lightbox__nav').forEach(n => { n.hidden = single; });
+  if (single) return;
+  [1, -1].forEach(d => {                             // warm the neighbours so stepping doesn't flash
+    new Image().src = lbShots[(lbIndex + d + lbShots.length) % lbShots.length];
+  });
 }
 
 function buildLightbox() {
@@ -373,6 +401,20 @@ function buildLightbox() {
   box.querySelector('.lightbox__nav--prev').addEventListener('click', () => stepLightbox(-1));
   box.querySelector('.lightbox__nav--next').addEventListener('click', () => stepLightbox(1));
   box.addEventListener('click', (e) => { if (e.target === box) closeLightbox(); });  // click the backdrop
+
+  // Swipe — on a phone the arrows are small targets, so let a drag across the shot step too.
+  let sx = 0, sy = 0, swiping = false;
+  box.addEventListener('touchstart', (e) => {
+    swiping = e.touches.length === 1;
+    if (swiping) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }
+  }, { passive: true });
+  box.addEventListener('touchend', (e) => {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) stepLightbox(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
   document.addEventListener('keydown', (e) => {
     if (!box.classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
