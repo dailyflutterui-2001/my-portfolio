@@ -234,37 +234,73 @@ section[id] { scroll-margin-top: 80px; }   /* keep titles clear of the fixed nav
 @media (max-width: 720px) { .ui-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } }
 
 /* ---------- Lightbox ---------- */
+/* The controls are absolutely positioned, so the *padding* is what keeps them off
+   the shot: the image only ever fills the content box, and every button lives in
+   the padding gutter. On a phone the side gutters would starve the image, so the
+   arrows drop to a bottom bar and the gutter moves from the sides to the bottom. */
 .lightbox {
   position: fixed; inset: 0; z-index: 200;
+  height: 100dvh;                                    /* dodge the mobile URL bar */
   display: none; align-items: center; justify-content: center;
   background: rgba(12, 12, 16, .88); backdrop-filter: blur(6px);
-  padding: 32px 20px;
+  padding: 68px 86px 58px;                           /* top: close · sides: arrows · bottom: count */
+  overscroll-behavior: contain;
 }
 .lightbox.open { display: flex; }
 .lightbox__img {
-  max-width: min(92vw, 420px); max-height: 88vh; width: auto; height: auto;
+  max-width: min(100%, 420px); max-height: 100%;
+  width: auto; height: auto; object-fit: contain;
   border-radius: var(--radius); box-shadow: 0 24px 60px rgba(0,0,0,.5);
+  -webkit-user-select: none; user-select: none; -webkit-user-drag: none;
 }
 .lightbox__close,
 .lightbox__nav {
-  position: absolute; color: #fff; background: rgba(255,255,255,.12);
+  position: absolute; color: #fff; background: rgba(255,255,255,.14);
   border-radius: 50%; display: grid; place-items: center;
-  transition: background .2s var(--ease);
+  transition: background .2s var(--ease), transform .2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
 }
 .lightbox__close:hover,
-.lightbox__nav:hover { background: rgba(255,255,255,.26); }
-.lightbox__close { top: 20px; right: 20px; width: 42px; height: 42px; font-size: 1.7rem; line-height: 1; }
+.lightbox__nav:hover { background: rgba(255,255,255,.28); }
+.lightbox__nav:active { transform: translateY(-50%) scale(.9); }
+.lightbox__close { top: 18px; right: 18px; width: 44px; height: 44px; font-size: 1.7rem; line-height: 1; }
 .lightbox__nav { top: 50%; transform: translateY(-50%); width: 48px; height: 48px; font-size: 2rem; line-height: 1; }
-.lightbox__nav--prev { left: 22px; }
-.lightbox__nav--next { right: 22px; }
+.lightbox__nav--prev { left: 18px; }
+.lightbox__nav--next { right: 18px; }
+.lightbox__nav[hidden] { display: none; }            /* single-shot apps get no arrows */
 .lightbox__count {
-  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
   color: rgba(255,255,255,.75); font-size: .88rem; letter-spacing: .03em;
 }
-@media (max-width: 720px) {
-  .lightbox__nav { width: 40px; height: 40px; font-size: 1.6rem; }
-  .lightbox__nav--prev { left: 8px; }
-  .lightbox__nav--next { right: 8px; }
+
+/* Phones: side gutters would leave the shot a sliver, so give it the full width
+   and move the arrows into a bottom bar either side of the counter. */
+@media (max-width: 640px) {
+  .lightbox { padding: 56px 12px calc(80px + env(safe-area-inset-bottom, 0px)); }
+  .lightbox__img { max-width: 100%; }
+  .lightbox__close { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.5rem; }
+  .lightbox__nav {
+    top: auto; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    transform: none; width: 46px; height: 46px; font-size: 1.8rem;
+  }
+  .lightbox__nav:active { transform: scale(.9); }
+  .lightbox__nav--prev { left: 22px; }
+  .lightbox__nav--next { right: 22px; }
+  .lightbox__count { bottom: calc(31px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Short / landscape screens: shrink the chrome so the shot keeps its height. */
+@media (max-height: 520px) {
+  .lightbox { padding: 12px 62px 30px; }
+  .lightbox__close { top: 8px; right: 8px; width: 36px; height: 36px; font-size: 1.4rem; }
+  .lightbox__nav {
+    top: 50%; bottom: auto; transform: translateY(-50%);
+    width: 40px; height: 40px; font-size: 1.6rem;
+  }
+  .lightbox__nav:active { transform: translateY(-50%) scale(.9); }
+  .lightbox__nav--prev { left: 10px; }
+  .lightbox__nav--next { right: 10px; }
+  .lightbox__count { bottom: 8px; font-size: .78rem; }
 }
 
 /* Service card */
