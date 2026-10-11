@@ -83,6 +83,23 @@ const PORTFOLIO = [
     ],
   },
   {
+    title: 'Wallet App UI',
+    shots: [
+      'assets/s1.png',
+      'assets/s2.png',
+      'assets/s3.png',
+      'assets/s4.png',
+      'assets/s5.png',
+      'assets/s6.png',
+      'assets/s7.png',
+      'assets/s8.png',
+      'assets/s9.png',
+      'assets/s10.png',
+      'assets/s11.png',
+      'assets/s12.png',
+    ],
+  },
+  {
     title: 'Food Delivery App UI',
     shots: [
       'assets/food0.png',
